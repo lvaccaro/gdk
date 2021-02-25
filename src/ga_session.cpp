@@ -138,6 +138,7 @@ namespace sdk {
             { "sms" },
             { "phone" },
             { "gauth" },
+            { "telegram" },
         };
 
         static const std::string MASKED_GAUTH_SEED("***");
@@ -3367,12 +3368,15 @@ namespace sdk {
         GDK_RUNTIME_ASSERT(locker.owns_lock());
 
         const auto email_addr = json_get_value(config, "email_addr");
+        const auto telegram_url = json_get_value(config, "telegram_url");
         nlohmann::json email_config
             = { { "enabled", config["email"] }, { "confirmed", config["email_confirmed"] }, { "data", email_addr } };
         nlohmann::json sms_config
             = { { "enabled", config["sms"] }, { "confirmed", config["sms"] }, { "data", config["sms_number"] } };
         nlohmann::json phone_config
             = { { "enabled", config["phone"] }, { "confirmed", config["phone"] }, { "data", config["phone_number"] } };
+        nlohmann::json telegram_config
+            = { { "enabled", config["telegram"] }, { "confirmed", config["telegram"] }, { "data", telegram_url } };
         // Return the server generated gauth URL until gauth is enabled
         // (after being enabled, the server will no longer return it)
         const bool gauth_enabled = config["gauth"];
@@ -3394,6 +3398,7 @@ namespace sdk {
                 { "sms", sms_config },
                 { "phone", phone_config },
                 { "gauth", gauth_config },
+                { "telegram", telegram_config},
                 { "twofactor_reset", reset_status },
             };
         std::swap(m_twofactor_config, twofactor_config);
