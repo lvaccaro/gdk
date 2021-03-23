@@ -48,6 +48,7 @@ namespace sdk {
         state_type m_state; // Current state
         uint32_t m_attempts_remaining;
         nlohmann::json m_hw_device;
+        nlohmann::json m_auth_data;
 
     private:
         void init(const nlohmann::json& hw_device, bool is_pre_login);

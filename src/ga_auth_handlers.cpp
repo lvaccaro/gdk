@@ -141,7 +141,7 @@ namespace sdk {
 
         // For gauth request code is a no-op
         if (method != "gauth") {
-            m_session.auth_handler_request_code(method, m_action, m_twofactor_data);
+            m_auth_data = m_session.auth_handler_request_code(method, m_action, m_twofactor_data);
         }
 
         m_method = method;
@@ -229,6 +229,7 @@ namespace sdk {
             } else {
                 // Caller should resolve the code the user has entered
                 status["method"] = m_method;
+                status["auth_data"] = m_auth_data;
                 if (m_method != "gauth") {
                     status["attempts_remaining"] = m_attempts_remaining;
                 }
@@ -1387,7 +1388,7 @@ namespace sdk {
             if (m_method_to_update != "gauth") {
                 // gauth doesn't have an init_enable step
                 const std::string data = json_get_value(m_details, "data");
-                m_session.init_enable_twofactor(m_method_to_update, data, m_twofactor_data);
+                m_auth_data = m_session.init_enable_twofactor(m_method_to_update, data, m_twofactor_data);
             } else {
                 const std::string proxy_code = m_session.auth_handler_request_proxy_code("gauth", m_twofactor_data);
                 m_twofactor_data = { { "method", "proxy" }, { "code", proxy_code } };

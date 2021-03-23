@@ -133,7 +133,12 @@ namespace sdk {
         static const std::string USER_AGENT_CAPS("[v2,sw,csv,csv_opt]");
         static const std::string USER_AGENT_CAPS_NO_CSV("[v2,sw]");
         // TODO: The server should return these
-        static const std::vector<std::string> ALL_2FA_METHODS = { { "email" }, { "sms" }, { "phone" }, { "gauth" } };
+        static const std::vector<std::string> ALL_2FA_METHODS = {
+            { "email" },
+            { "sms" },
+            { "phone" },
+            { "gauth" },
+        };
 
         static const std::string MASKED_GAUTH_SEED("***");
         static const uint32_t DEFAULT_MIN_FEE = 1000; // 1 satoshi/byte
@@ -3384,8 +3389,13 @@ namespace sdk {
             = { { "is_active", m_is_locked }, { "days_remaining", days_remaining }, { "is_disputed", disputed } };
 
         nlohmann::json twofactor_config
-            = { { "all_methods", ALL_2FA_METHODS }, { "email", email_config }, { "sms", sms_config },
-                  { "phone", phone_config }, { "gauth", gauth_config }, { "twofactor_reset", reset_status } };
+            = { { "all_methods", ALL_2FA_METHODS },
+                { "email", email_config },
+                { "sms", sms_config },
+                { "phone", phone_config },
+                { "gauth", gauth_config },
+                { "twofactor_reset", reset_status },
+            };
         std::swap(m_twofactor_config, twofactor_config);
         set_enabled_twofactor_methods(locker);
     }
@@ -3436,7 +3446,7 @@ namespace sdk {
         m_twofactor_config["email"]["confirmed"] = true;
     }
 
-    void ga_session::init_enable_twofactor(
+    nlohmann::json ga_session::init_enable_twofactor(
         const std::string& method, const std::string& data, const nlohmann::json& twofactor_data)
     {
         const std::string api_method = "twofactor.init_enable_" + method;
@@ -3444,8 +3454,10 @@ namespace sdk {
         locker_t locker(m_mutex);
         GDK_RUNTIME_ASSERT(!m_twofactor_config.is_null()); // Caller must fetch before changing
 
-        wamp_call(locker, api_method, data, mp_cast(twofactor_data).get());
+        auto result = wamp_call(locker, api_method, data, mp_cast(twofactor_data).get());
         m_twofactor_config[method]["data"] = data;
+
+        return wamp_cast_json(result);
     }
 
     void ga_session::enable_twofactor(const std::string& method, const std::string& code)
@@ -3502,10 +3514,11 @@ namespace sdk {
     }
 
     // Idempotent
-    void ga_session::auth_handler_request_code(
+    nlohmann::json ga_session::auth_handler_request_code(
         const std::string& method, const std::string& action, const nlohmann::json& twofactor_data)
     {
-        wamp_call("twofactor.request_" + method, action, mp_cast(twofactor_data).get());
+        auto result = wamp_call("twofactor.request_" + method, action, mp_cast(twofactor_data).get());
+        return wamp_cast_json(result);
     }
 
     // Idempotent
