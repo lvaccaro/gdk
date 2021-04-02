@@ -139,6 +139,7 @@ namespace sdk {
             { "phone" },
             { "gauth" },
             { "telegram" },
+            { "u2f" },
         };
 
         static const std::string MASKED_GAUTH_SEED("***");
@@ -3377,6 +3378,8 @@ namespace sdk {
             = { { "enabled", config["phone"] }, { "confirmed", config["phone"] }, { "data", config["phone_number"] } };
         nlohmann::json telegram_config
             = { { "enabled", config["telegram"] }, { "confirmed", config["telegram"] }, { "data", telegram_url } };
+        nlohmann::json u2f_config
+            = { { "enabled", config["u2f"] }, { "confirmed", config["u2f"] }, { "data", "" } };
         // Return the server generated gauth URL until gauth is enabled
         // (after being enabled, the server will no longer return it)
         const bool gauth_enabled = config["gauth"];
@@ -3399,6 +3402,7 @@ namespace sdk {
                 { "phone", phone_config },
                 { "gauth", gauth_config },
                 { "telegram", telegram_config},
+                { "u2f", u2f_config},
                 { "twofactor_reset", reset_status },
             };
         std::swap(m_twofactor_config, twofactor_config);
