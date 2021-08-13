@@ -190,7 +190,7 @@ fi
 
 if [ \( "$BUILD" = "--clang" \) ]; then
     export IOS_SDK_PATH="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
-    export CFLAGS="${SDK_CFLAGS} -isysroot ${IOS_SDK_PATH} -mmacosx-version-min=10.13 -O3 ${EXTRA_FLAGS} -fembed-bitcode"
+    export CFLAGS="${SDK_CFLAGS} -isysroot ${IOS_SDK_PATH} -mmacosx-version-min=10.13 -O3 ${EXTRA_FLAGS}"
     export LDFLAGS="${SDK_LDFLAGS} -isysroot ${IOS_SDK_PATH} -mmacosx-version-min=10.13 ${EXTRA_FLAGS}"
     build clang clang++
 fi
