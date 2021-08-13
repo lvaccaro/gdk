@@ -89,11 +89,11 @@ common_link_args = [
 if (is_darwin or cross_iphone_build) and not cross_android_build
   # to generate keys in gdk_rust
   add_project_link_arguments(['-Wl,-framework,Security'], language : 'cpp')
-  # building with older deployment target macOS 11
-  # add_project_link_arguments(['-Wl,-U,___darwin_check_fd_set_overflow'], language : ['c', 'cpp'])
 endif
 
 if is_darwin and not cross_android_build and not cross_iphone_build
+  # building with older deployment target macOS 11
+  add_project_link_arguments(['-Wl,-U,___darwin_check_fd_set_overflow'], language : ['c', 'cpp'])
   add_project_arguments(['-mmacosx-version-min=10.13'], language : ['c', 'cpp'])
   add_project_link_arguments(['-mmacosx-version-min=10.13'], language : ['c', 'cpp'])
 endif
