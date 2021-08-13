@@ -116,12 +116,15 @@ else
         TOOLSET=gcc
     fi
 
-
     EXTRAFLAGS=""
     LINKFLAGS=""
     if [ "$LTO" = "true" ]; then
         EXTRAFLAGS="-flto"
         LINKFLAGS="linkflags=-flto"
+    fi
+
+    if [ "$(uname)" = "Darwin" ]; then
+      LINKFLAGS="$LINKFLAGS toolset=darwin address-model=64 architecture=x86 macosx-version-min=10.13"
     fi
 
     cxxflags="$EXTRAFLAGS -DPIC -fPIC -fvisibility=hidden -DBOOST_LOG_NO_ASIO ${@}"

@@ -66,6 +66,11 @@ elif [ \( "$1" = "--windows" \) ]; then
 else
     export CFLAGS="$SDK_CFLAGS -DPIC -fPIC $EXTRA_FLAGS"
     export LDFLAGS="$SDK_LDFLAGS $EXTRA_FLAGS"
+    if [ "$(uname)" = "Darwin" ]; then
+      export IOS_SDK_PATH="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX"
+      export CFLAGS="$CFLAGS -isysroot ${IOS_SDK_PATH} -mmacosx-version-min=10.13 -O3"
+      export LDFLAGS="$LDFLAGS -isysroot ${IOS_SDK_PATH} -mmacosx-version-min=10.13"
+    fi
     $SED -i "740a TOR_LIB_PTHREAD=-lpthread" configure.ac
     $SED -i "741s!^TOR_LIB.*!  TOR_LIB_PTHREAD=-lpthread!" configure.ac
     $SED -i "764a AC_SUBST(TOR_LIB_PTHREAD)" configure.ac
