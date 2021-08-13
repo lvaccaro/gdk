@@ -116,12 +116,17 @@ else
         TOOLSET=gcc
     fi
 
-
     EXTRAFLAGS=""
     LINKFLAGS=""
     if [ "$LTO" = "true" ]; then
         EXTRAFLAGS="-flto"
         LINKFLAGS="linkflags=-flto"
+    fi
+
+    if [ "$(uname)" = "Darwin" ]; then
+      export IOS_SDK_PATH="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
+      export CFLAGS="$CFLAGS -isysroot ${IOS_SDK_PATH} -mmacosx-version-min=10.13 -O3"
+      export LDFLAGS="$LDFLAGS -isysroot ${IOS_SDK_PATH} -mmacosx-version-min=10.13"
     fi
 
     cxxflags="$EXTRAFLAGS -DPIC -fPIC -fvisibility=hidden -DBOOST_LOG_NO_ASIO ${@}"

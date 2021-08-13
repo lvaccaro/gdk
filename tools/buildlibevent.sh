@@ -42,9 +42,21 @@ elif [ \( "$1" = "--windows" \) ]; then
 
     make -j$NUM_JOBS
     make install
+elif [ \( "$1" = "--windows" \) ]; then
+     export CC=x86_64-w64-mingw32-gcc-posix
+     export CXX=x86_64-w64-mingw32-g++-posix
+    ./configure --host=x86_64-w64-mingw32 --build=${HOST_OS} ${CONFIGURE_ARGS}
+
+    make -j$NUM_JOBS
+    make install
 else
     export CFLAGS="$SDK_CFLAGS -DPIC -fPIC $EXTRA_FLAGS"
     export LDFLAGS="$SDK_LDFLAGS $EXTRA_FLAGS"
+    if [ "$(uname)" = "Darwin" ]; then
+      export IOS_SDK_PATH="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
+      export CFLAGS="$CFLAGS -isysroot ${IOS_SDK_PATH} -mmacosx-version-min=10.13 -O3"
+      export LDFLAGS="$LDFLAGS -isysroot ${IOS_SDK_PATH} -mmacosx-version-min=10.13"
+    fi
 
     ./configure ${CONFIGURE_ARGS} --with-pic --host=${HOST_OS}
 
