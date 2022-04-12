@@ -101,7 +101,7 @@ else
         ENABLE_SWIG_JAVA="--enable-swig-java"
     fi
 
-    ./configure ${ENABLE_SWIG_JAVA} --host=${HOST_OS} ${CONFIGURE_ARGS}
+    ./configure ${ENABLE_SWIG_JAVA} --build=${HOST_OS} ${CONFIGURE_ARGS}
     make clean -k || echo >/dev/null
     make -j${NUM_JOBS}
 fi
