@@ -74,7 +74,11 @@ elif [ \( "$1" = "--windows" \) ]; then
     make install_sw
 else
     if [ "$(uname)" = "Darwin" ]; then
-        ./Configure darwin64-x86_64-cc --prefix="$openssl_prefix" $OPENSSL_OPTIONS -mmacosx-version-min=10.13
+        if [ "$(uname -m)" = "arm64" ]; then
+            ./Configure darwin64-arm64-cc --prefix="$openssl_prefix" $OPENSSL_OPTIONS -mmacosx-version-min=10.13
+        else
+            ./Configure darwin64-x86_64-cc --prefix="$openssl_prefix" $OPENSSL_OPTIONS -mmacosx-version-min=10.13
+        fi
     else
         ./config --prefix="$openssl_prefix" $OPENSSL_OPTIONS
         $SED -ie "s!^CFLAG=!CFLAG=-fPIC -DPIC !" "Makefile"
