@@ -44,7 +44,7 @@ elif [ \( "$1" = "--iphone" \) -o \( "$1" = "--iphonesim" \) ]; then
     . ${MESON_SOURCE_ROOT}/tools/ios_env.sh $1
 
     export CC=${XCODE_DEFAULT_PATH}/clang
-    export CROSS_TOP="${XCODE_PATH}/Platforms/${IOS_PLATFORM}.platform/Developer"
+    export CROSS_TOP="${IOS_SDK_PLATFORM}/Developer"
     export CROSS_SDK="${IOS_PLATFORM}.sdk"
     export PATH="${XCODE_DEFAULT_PATH}:$PATH"
     if test "x$1" == "x--iphonesim"; then
