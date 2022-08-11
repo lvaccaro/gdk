@@ -277,8 +277,6 @@ if [ \( "$BUILD" = "--iphone" \) -o \( "$BUILD" = "--iphonesim" \) ]; then
         bld_root="$PWD/build-clang-$1-$2"
 
         . tools/ios_env.sh $BUILD
-
-        export PATH=$XCODE_IOS_PATH:$PATH_BASE
         export AR=ar
         export CC=${XCODE_DEFAULT_PATH}/clang
         export CXX=${XCODE_DEFAULT_PATH}/clang++
