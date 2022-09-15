@@ -68,8 +68,13 @@ elif [ \( "$1" = "--iphone" \) ]; then
     RUSTTARGET=aarch64-apple-ios
     LD_ARCH="-arch arm64 -platform_version ios 11.0 11.0"
 elif [ \( "$1" = "--iphonesim" \) ]; then
-    RUSTTARGET=x86_64-apple-ios
-    LD_ARCH="-arch x86_64 -platform_version ios-simulator 11.0 11.0"
+    if [ "$(uname -m)" = "arm64" ]; then
+        RUSTTARGET=arm64-apple-ios
+        LD_ARCH="-arch arm64 -platform_version ios-simulator 11.0 11.0"
+    else
+        RUSTTARGET=x86_64-apple-ios
+        LD_ARCH="-arch x86_64 -platform_version ios-simulator 11.0 11.0"
+    fi
 elif [ "$(uname)" = "Darwin" ]; then
     SDK_CPU=$(uname -m)
     RUSTTARGET=$HOST_OS

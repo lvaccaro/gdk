@@ -177,8 +177,15 @@ function set_cross_build_env() {
             export SDK_CPU=arm64
             ;;
         iphonesim)
-            export SDK_ARCH=x86_64
-            export SDK_CPU=x86_64
+            if [ "$(uname -m)" = "arm64" ]; then
+                export HOST_OS="aarch64-apple-darwin"
+                export SDK_ARCH="aarch64"
+                export SDK_CPU="arm64"
+            else
+                export SDK_ARCH="x86_64"
+                export SDK_CPU="x86_64"
+                export HOST_OS="x86_64-apple-darwin"
+            fi
             ;;
         x86_64)
             export SDK_ARCH=$HOST_ARCH
