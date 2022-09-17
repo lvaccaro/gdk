@@ -113,10 +113,8 @@ WEAKEN="${SOURCE_ROOT}/subprojects/gdk_rust/weaken-symbols"
 
 if [ -z "${OBJCOPY}" ]; then
     # on Darwin we use ld to hide all the unnecessary symbols (mostly secp256k1 stuff)
-    echo 'ld ${LD_ARCH} -o "${BUILD_ROOT}/$OUTPUT" -r -exported_symbols_list "$APPLE_KEEP" "${BUILD_ROOT}/$OUTPUT"'
+    echo "ld ${LD_ARCH} -o \"${BUILD_ROOT}/$OUTPUT\" -r -exported_symbols_list \"$APPLE_KEEP\" \"${BUILD_ROOT}/$OUTPUT\""
     ld ${LD_ARCH} -o "${BUILD_ROOT}/$OUTPUT" -r -exported_symbols_list "$APPLE_KEEP" "${BUILD_ROOT}/$OUTPUT"
 else
     $OBJCOPY --strip-unneeded --keep-symbols="$KEEP" --weaken-symbols="$WEAKEN" "${BUILD_ROOT}/$OUTPUT"
 fi
-
-printf ("*****")

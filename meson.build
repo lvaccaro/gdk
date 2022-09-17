@@ -91,8 +91,13 @@ if is_darwin and not cross_android_build and not cross_iphone_build
 endif
 
 if cross_iphone_build
-  add_project_arguments(['-miphoneos-version-min=11.0'], language : ['c', 'cpp'])
-  add_project_link_arguments(['-miphoneos-version-min=11.0'], language : ['c', 'cpp'])
+  if meson.get_cross_property('target_os', '').contains('iphonesim')
+    add_project_arguments(['-mios-simulator-version-min=13.7'], language : ['c', 'cpp'])
+    add_project_link_arguments(['-mios-simulator-version-min=13.7'], language : ['c', 'cpp'])
+  else
+    add_project_arguments(['-miphoneos-version-min=11.0'], language : ['c', 'cpp'])
+    add_project_link_arguments(['-miphoneos-version-min=11.0'], language : ['c', 'cpp'])
+  endif
 endif
 
 if is_freebsd
