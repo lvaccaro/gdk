@@ -70,7 +70,7 @@ elif [ \( "$1" = "--iphone" \) ]; then
 elif [ \( "$1" = "--iphonesim" \) ]; then
     if [ "$(uname -m)" = "arm64" ]; then
         RUSTTARGET=aarch64-apple-ios-sim
-        LD_ARCH="-arch arm64 -platform_version ios-simulator 11.0 11.0"
+        LD_ARCH="-arch arm64 -platform_version ios-simulator 14.0 14.0"
     else
         RUSTTARGET=x86_64-apple-ios
         LD_ARCH="-arch x86_64 -platform_version ios-simulator 11.0 11.0"
@@ -113,7 +113,10 @@ WEAKEN="${SOURCE_ROOT}/subprojects/gdk_rust/weaken-symbols"
 
 if [ -z "${OBJCOPY}" ]; then
     # on Darwin we use ld to hide all the unnecessary symbols (mostly secp256k1 stuff)
+    echo 'ld ${LD_ARCH} -o "${BUILD_ROOT}/$OUTPUT" -r -exported_symbols_list "$APPLE_KEEP" "${BUILD_ROOT}/$OUTPUT"'
     ld ${LD_ARCH} -o "${BUILD_ROOT}/$OUTPUT" -r -exported_symbols_list "$APPLE_KEEP" "${BUILD_ROOT}/$OUTPUT"
 else
     $OBJCOPY --strip-unneeded --keep-symbols="$KEEP" --weaken-symbols="$WEAKEN" "${BUILD_ROOT}/$OUTPUT"
 fi
+
+printf ("*****")
